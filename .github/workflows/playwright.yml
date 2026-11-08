@@ -1,0 +1,101 @@
+name: Playwright
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'src/**'
+      - 'tests/**'
+      - 'test-data/**'
+      - 'config/**'
+      - 'scripts/**'
+      - 'playwright.config.ts'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'tsconfig.json'
+      - 'eslint.config.mjs'
+      - '.github/workflows/playwright.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'src/**'
+      - 'tests/**'
+      - 'test-data/**'
+      - 'config/**'
+      - 'scripts/**'
+      - 'playwright.config.ts'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'tsconfig.json'
+      - 'eslint.config.mjs'
+      - '.github/workflows/playwright.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: ${{ matrix.name }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: chromium
+            browsers: chromium
+            projects: --project=chromium --project=api
+            grep: ''
+          - name: firefox-smoke
+            browsers: chromium firefox
+            projects: --project=firefox
+            grep: '@smoke'
+          - name: webkit-smoke
+            browsers: chromium webkit
+            projects: --project=webkit
+            grep: '@smoke'
+    env:
+      CI: true
+      TEST_ENV: ci
+      TEST_GREP: ${{ matrix.grep }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ hashFiles('package-lock.json') }}-${{ matrix.browsers }}
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps ${{ matrix.browsers }}
+
+      - name: Run tests
+        run: npx playwright test ${{ matrix.projects }}
+
+      - name: Upload Playwright and Allure artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-output-${{ matrix.name }}
+          path: |
+            playwright-report/
+            test-results/
+            allure-results/
+          retention-days: 14
+          if-no-files-found: warn

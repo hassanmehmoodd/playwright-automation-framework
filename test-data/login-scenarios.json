@@ -1,0 +1,20 @@
+[
+  {
+    "name": "a locked out user",
+    "username": "locked_out_user",
+    "password": "secret_sauce",
+    "expectedError": "Sorry, this user has been locked out."
+  },
+  {
+    "name": "an unknown password",
+    "username": "standard_user",
+    "password": "not-the-sauce",
+    "expectedError": "Username and password do not match"
+  },
+  {
+    "name": "a missing username",
+    "username": "",
+    "password": "secret_sauce",
+    "expectedError": "Username is required"
+  }
+]

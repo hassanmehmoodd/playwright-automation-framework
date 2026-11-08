@@ -1,0 +1,14 @@
+[
+  {
+    "firstName": "Jordan",
+    "lastName": "Lee",
+    "postalCode": "54000",
+    "tags": ["@smoke", "@regression", "@ui"]
+  },
+  {
+    "firstName": "Sam",
+    "lastName": "Rivera",
+    "postalCode": "75500",
+    "tags": ["@regression", "@ui"]
+  }
+]

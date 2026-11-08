@@ -1,0 +1,55 @@
+{
+  "name": "playwright-automation-framework",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Cross-browser UI and API automation framework built with Playwright and TypeScript.",
+  "author": "Hassan Mehmood (https://github.com/hassanmehmoodd)",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hassanmehmoodd/playwright-automation-framework.git"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "test": "playwright test",
+    "test:smoke": "cross-env TEST_GREP=@smoke playwright test",
+    "test:regression": "cross-env TEST_GREP=@regression playwright test",
+    "test:ui": "cross-env TEST_GREP=@ui playwright test",
+    "test:api": "cross-env TEST_GREP=@api playwright test --project=api",
+    "test:mock": "cross-env TEST_GREP=@mock playwright test",
+    "test:chromium": "playwright test --project=chromium",
+    "test:firefox": "playwright test --project=firefox",
+    "test:webkit": "playwright test --project=webkit",
+    "test:headed": "playwright test --headed --project=chromium",
+    "test:local": "cross-env TEST_ENV=local playwright test",
+    "test:ci": "cross-env TEST_ENV=ci playwright test",
+    "report": "playwright show-report",
+    "allure:generate": "allure generate ./allure-results --clean -o ./allure-report",
+    "allure:open": "allure open ./allure-report --host 127.0.0.1",
+    "docs:capture": "node scripts/capture-docs.mjs",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@playwright/test": "^1.65.0",
+    "@types/node": "^26.6.6",
+    "allure": "^3.33.0",
+    "allure-playwright": "^3.14.0",
+    "cross-env": "^10.1.0",
+    "dotenv": "^18.0.9",
+    "eslint": "^10.14.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-playwright": "^2.12.2",
+    "globals": "^17.14.0",
+    "prettier": "^3.9.10",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.72.1",
+    "zod": "^4.6.7"
+  }
+}
